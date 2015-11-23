@@ -12,7 +12,7 @@ import spock.lang.Ignore
 @ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application)
 @WebAppConfiguration
 @DirtiesContext
-abstract class BaseBootGebSpec extends GebSpec {
+abstract class BaseBootGebUISpec extends GebSpec {
 
     def setupSpec() {
         System.setProperty("APP_ENV", "dev")
