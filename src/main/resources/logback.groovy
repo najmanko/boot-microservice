@@ -13,6 +13,7 @@ LogbackConfiguration logbackConfig = new LogbackConfiguration()
 //for more details about groovy conf, see http://logback.qos.ch/manual/groovy.html
 statusListener(OnConsoleStatusListener)
 String rollingFile = "FILE"
+String auditFile = "FILE_AUDIT"
 String console = "CONSOLE"
 List whereToLog = [rollingFile, console]
 String logPattern = logbackConfig.getLogPattern()
@@ -46,6 +47,18 @@ appender(rollingFile, RollingFileAppender) {
     }
 }
 
+appender(auditFile, RollingFileAppender) {
+    file = 'logs/audit.log'
+    append = true
+    rollingPolicy(TimeBasedRollingPolicy) {
+        fileNamePattern = rollingFileNamePattern
+        maxHistory = rollingFileMaxHistory
+    }
+    encoder(PatternLayoutEncoder) {
+        pattern = logPattern
+    }
+}
+
 appender(console, ConsoleAppender) {
     encoder(PatternLayoutEncoder) {
         pattern = logPattern
@@ -58,3 +71,5 @@ if (System.getProperty(ACTIVE_PROFILES_PROPERTY_NAME) == PRODUCTION) {
 } else {
     logger("com.ofg", DEBUG)
 }
+
+logger('io.fourfinance.activity_tracker.audit.DefaultTrackUserActivityAudits', DEBUG, ['FILE_AUDIT'], true)
